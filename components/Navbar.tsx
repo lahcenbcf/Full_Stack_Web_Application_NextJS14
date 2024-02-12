@@ -35,7 +35,7 @@ const Navbar = () => {
                                     </Link>
                                 </div>
                             ) : <div>
-                                <Link href={"http://localhost:5000/auth/google"} className="black_btn">sign In</Link>
+                                <button className="black_btn" onClick={()=>signIn("google")}>sign In</button>
                             </div>
                         }
                 </div>
@@ -56,7 +56,7 @@ const Navbar = () => {
                         </div>
                        
                         ): <div>
-                            <Link href={"http://localhost:5000/auth/google"} className="black_btn">sign In</Link>
+                            <button className="black_btn" onClick={()=>signIn("google")}>sign In</button>
                         </div>
                     }
                     

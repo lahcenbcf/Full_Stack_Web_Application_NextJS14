@@ -21,10 +21,10 @@ const handler=NextAuth({
             session.user.id=userSession._id.toString()
             return session
         },
-        /*async signIn({profile,user,credentials}){
+        async signIn({profile,user,credentials}){
             try {
-                await connectToDB()
-                const userExist=await User.findOne({
+                //await connectToDB()
+                /*const userExist=await User.findOne({
                     email:profile?.email
                 })
 
@@ -34,13 +34,24 @@ const handler=NextAuth({
                     username:profile?.name?.replace(" ",""),
                     image:user?.image
                 })
-                }
+                }*/
+                await fetch("http://localhost:3000/auth",{
+                    method:"POST",
+                    headers:{
+                        "Content-Type":"application/json"
+                    },
+                    body:JSON.stringify({
+                        email:profile?.email,
+                    username:profile?.name?.replace(" ",""),
+                    image:user?.image
+                    })
+                })
                 return true
             } catch (error) {
                 console.log(error)
                 return false
             }
-        }*/
+        }
     }
 
 })

@@ -1,72 +1,66 @@
-const passport = require('passport');
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
-require("dotenv").config()
-const session = require('express-session');
+const express = require("express")
+const next = require('next')
 const fs=require("fs/promises")
-const express=require("express")
-const app=express()
+const cors=require("cors")
+require("dotenv").config()
+const port = parseInt(process.env.PORT, 10) || 3000;
+const dev = process.env.NODE_ENV !== 'production';
+const app = next({ dev });
+const handle = app.getRequestHandler();
 
-
-app.get("/hello",(req,res)=>{
-  res.json({
-    message:"hello user"
-  })
-})
-
-// Trigger Google OAuth flow
-app.get('/auth/google',
-  passport.authenticate('google', { scope: ['profile', 'email'] }));
-
-// Callback route after Google has authenticated the user
-app.get('/auth/google/callback', 
-  
-  passport.authenticate('google', { failureRedirect: '/login' }),
-  (req, res) => {
-    // Successful authentication, redirect home or to another page
-    res.redirect('/');
+app.prepare().then(() => {
+  const server = express()
+  server.use(express.json())
+  // Define custom Express routes here
+  server.post('/auth', (req, res) => {
+    console.log(req.body)
+    addUser(req.body)
+    res.json({ message: 'successufully added' });
   });
 
+  server.get("/hello",(req,res)=>{
+    res.send("hello")
+  })
 
-  app.use(session({
-    secret: 'secret', // Replace with your session secret
-    resave: false,
-    saveUninitialized: true,
-  }));
-  
-  app.use(passport.initialize());
-  app.use(passport.session());
-  
-passport.use(new GoogleStrategy({
-    clientID: process.env.CLIENT_ID,
-    clientSecret: process.env.CLIENT_SECRET,
-    callbackURL: "/auth/google/callback"
-  },
-  async (accessToken, refreshToken, profile, cb) => {
-    // Here, you would either create a new user in your DB or update an existing user
-    // You might want to connect to your database and perform operations like:
-    try {
-    
-      //await connectToDB(); // Your database connection logic
-      
-      const user={
-        _id:Math.random()*10000000000000,
-        email:profile.emails[0].value
-      }
-      await addUser(user)
-      return cb(null,user)
-    } catch (error) {
-      return cb(error, null);
-    }
-  }
-));
+  // Next.js page handling for all other routes
+  server.all('*', (req, res) => {
+    return handle(req, res);
+  });
 
-// Serialize and deserialize user instances to and from the session.
-passport.serializeUser((user, cb) => cb(null, user._id));
-passport.deserializeUser((id, cb) => {
-    findUser(id).then(user => cb(null,user))
+  server.listen(port, (err) => {
+    if (err) throw err;
+    console.log(`> Ready on http://localhost:${port}`);
+  });
 });
 
 
 
-app.listen(5000)
-const data=getDb("users.json").then(data => console.log(data.data.length))
+
+
+async function getDb(db_name){
+  const users=await fs.readFile(db_name);
+  const data=JSON.parse(users)
+  return data
+}
+
+
+async function saveDB(db_name,db){
+  console.log("3")
+  await fs.writeFile(db_name,JSON.stringify(db))
+}
+
+async function addUser(user){
+  console.log("1")
+    const users=await getDb("users.json")
+    if(!users.data.includes(user)){
+      users.data.push(user)
+      await saveDB("users.json",users)
+    }
+    return;
+}
+
+async function findUser(userid){
+    const users=await getDb("users.json")
+    return users.find(u => u._id == userid)
+}
+
