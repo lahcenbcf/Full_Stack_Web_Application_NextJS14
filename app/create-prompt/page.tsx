@@ -1,13 +1,18 @@
 "use client"
 import Form from "@/components/Form"
 import { Ipost } from "@/types"
+import { getCurrentUser } from "@/utils/session"
 import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
+
+
+
 const page = () => {
   const [post,setPost]=useState<Ipost|null>(null)
   const [submitting,setSubmitting]=useState(false)
   const {data:session}=useSession()
+
   const router=useRouter()
   const submitForm=async(e:React.SyntheticEvent)=>{
     try {
@@ -16,7 +21,7 @@ const page = () => {
       const response=await fetch("/api/prompt/new",{
         method:"POST",
         body:JSON.stringify({
-          author:session?.user.id,
+          author:session?.user?.id,
           title:post?.title,
           tag:post?.tag
         })

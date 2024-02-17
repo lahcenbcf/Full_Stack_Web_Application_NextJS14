@@ -7,19 +7,19 @@ import { usePathname, useRouter } from "next/navigation";
 import {Ipost} from "@/types/index"
 const PromptCard = ({ post , handleEdit, handleDelete, handleTagClick }:{
     post : Ipost,
-    handleEdit:()=>void,
-    handleDelete:()=>void,
-    handleTagClick:(v:string)=>void | null
+    handleEdit?:()=>void,
+    handleDelete?:()=>void,
+    handleTagClick?:(v:string)=>void | null
 }) => {
   const { data: session } = useSession();
-  const pathName = usePathname();
   const router = useRouter();
   const [copied, setCopied] = useState("");
 
   const handleProfileClick = () => {
-    if (post.author.id === session?.user.id) return router.push("/profile");
+    if (post.author._id === session?.user.id) return router.push("/profile");
     router.push(`/profile/${post.author}?name=${post.author}`);
   };
+
 
   const handleCopy = () => {
     setCopied(post.title);
@@ -74,16 +74,16 @@ const PromptCard = ({ post , handleEdit, handleDelete, handleTagClick }:{
         #{post.tag}
       </p>
 
-      {session?.user.id === post.author.id && pathName === "/profile" && (
-        <div className='mt-5 flex-center gap-4 border-t border-gray-100 pt-3'>
+      {session?.user.id === post.author._id && (
+        <div className='mt-5 flex justify-end gap-4 border-t border-gray-100 pt-3'>
           <p
-            className='font-inter text-sm green_gradient cursor-pointer'
+            className='font-inter font-bold text-sm green_gradient cursor-pointer'
             onClick={handleEdit}
           >
             Edit
           </p>
           <p
-            className='font-inter text-sm orange_gradient cursor-pointer'
+            className='font-inter text-sm font-bold text-red-500 cursor-pointer'
             onClick={handleDelete}
           >
             Delete

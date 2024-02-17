@@ -4,7 +4,10 @@ export const GET =async(request:Request,{params}:{
         id:string
     }
 })=>{
+
+    
     try {
+        console.log(params.id)
         const prompts=await Prompt.find({
             author:params.id
         }).populate("author")

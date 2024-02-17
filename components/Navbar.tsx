@@ -30,12 +30,12 @@ const Navbar = () => {
                                 <div className="flex gap-3">
                                     <Link href={"/create-prompt"} className="black_btn" >create prompt</Link>
                                     <button className="outline_btn" type="button" onClick={()=>signOut()}>Signout</button>
-                                    <Link href={"/profile"}>
+                                    <Link href={`/profile?id=${session?.user?.id}`}>
                                         <Image src={session.user.image} width={34} height={35} className="object-cover rounded-full shadow-md" alt="profile_pic" />
                                     </Link>
                                 </div>
                             ) : <div>
-                                <Link href={"http://localhost:5000/auth/google"} className="black_btn">sign In</Link>
+                                <button onClick={()=>signIn("google")} className="black_btn">sign In</button>
                             </div>
                         }
                 </div>
@@ -47,7 +47,7 @@ const Navbar = () => {
                         <div className="flex" onClick={()=>setOpen(prev => !prev)}>
                             <Image src={session.user.image} alt="logo_mobile_screen" width={35} height={35} />
                             {open && <div className="dropdown">
-                                <Link href={"/profile"} className="dropdown_link text-black" onClick={()=>setOpen(false)}>My profile</Link>
+                                <Link href={`/profile?id=${session?.user?.id}`} className="dropdown_link text-black" onClick={()=>setOpen(false)}>My profile</Link>
                                 <Link href={"/create-prompt"} className="dropdown_link text-black" onClick={()=>setOpen(false)}>Create Prompt</Link>
                                 <button type="button" className="black_btn" onClick={()=>{
                                     setOpen(false)
@@ -56,7 +56,7 @@ const Navbar = () => {
                         </div>
                        
                         ): <div>
-                            <Link href={"http://localhost:5000/auth/google"} className="black_btn">sign In</Link>
+                            <button onClick={()=>signIn("google")} className="black_btn">sign In</button>
                         </div>
                     }
                     

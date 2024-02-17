@@ -15,7 +15,7 @@ const page = ({params}:{
         username:"",
         image:"",
         email:"",
-        id:""
+        _id:""
     })
     const [loading,setLoading]=useState(false)
     const {push}=useRouter()

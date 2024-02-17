@@ -18,8 +18,6 @@ const PromptList=({
           key={post._id}
           post={post}
           handleTagClick={handleTagClick}
-          handleDelete={()=>{}}
-          handleEdit={()=>{}}
         />
       ))}
     </div>
@@ -34,7 +32,6 @@ const Feed = () => {
     const [prompts,setPrompts]=useState<Ipost[]>([])
     const submitSearch=async(e:React.SyntheticEvent)=>{
                 e.preventDefault()
-                console.log(searchText)
                 setSearchRes(prompts.filter(p=>p.title.includes(searchText)))
     }
 
@@ -57,7 +54,7 @@ const Feed = () => {
     <div className="container w-full mx-auto px-4">
             <SearchBar searchText={searchText} setSearchText={setSearchText} searchHandle={submitSearch} />
             {
-                searchText ? <PromptList data={searchRes} handleTagClick={handleTagClick} /> : <PromptList data={prompts} handleTagClick={handleTagClick} />
+                <PromptList data={ searchText ? searchRes : prompts} handleTagClick={handleTagClick} />
             }
     </div>
   )

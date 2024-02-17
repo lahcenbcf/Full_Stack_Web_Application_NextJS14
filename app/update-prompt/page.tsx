@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import Form from "@/components/Form";
-import { Ipost } from "@/types";
 
 const UpdatePrompt = () => {
   const router = useRouter();
@@ -21,10 +20,9 @@ const UpdatePrompt = () => {
     const getPromptDetails = async () => {
       const response = await fetch(`/api/prompt/${promptId}`);
       const data = await response.json();
-
       setPost({
-        title: data.title,
-        tag: data.tag,
+        title: data.prompt.title,
+        tag: data.prompt.tag,
       });
     };
 

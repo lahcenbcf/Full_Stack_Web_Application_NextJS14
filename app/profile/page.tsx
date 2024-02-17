@@ -1,19 +1,15 @@
 "use client"
 import Profile from "@/components/Profile"
-import { Ipost } from "@/types"
-import { useRouter } from "next/navigation"
+import { useSession } from "next-auth/react"
+import { useRouter, useSearchParams } from "next/navigation"
 import { useEffect, useState } from "react"
 
-const page = ({params}:{
-    params:{
-        id:string
-    }
-}) => {
+const page = () => {
+    const {data:session}=useSession()
     const {push} =useRouter()
     const [myPosts,setMyPosts]=useState([])
-    const [profile,setProfile]=useState({})
-    const username="lahcen"
 
+    const searchParams=useSearchParams()
     const handleEdit=async(prompt_id:string)=>{
         
             push(`/update-prompt?id=${prompt_id}`);
@@ -25,22 +21,25 @@ const page = ({params}:{
             const res=await fetch(`/api/prompt/${prompt_id}`,{
                 method:"DELETE"
             })
+            push("/")
         } catch (error) {
             console.log(error)
         }
     }
 
     useEffect(()=>{
-        const fetchpsost=async()=>{
-            const response=await fetch(`/api/user/${params.id}/posts`)
+        
+        const fetchposts=async(userId:string)=>{
+            const response=await fetch(`/api/users/${userId}/posts`)
             const prompts=await response.json()
             setMyPosts(prompts)
         }
-        params?.id &&  fetchpsost()
+
+        fetchposts(searchParams.get("id")!)
     },[])
   return (
     <div>
-      <Profile data={myPosts} name={username} desc={"hello"} handleEdit={handleEdit} handleDelete={handleDelete} />
+      <Profile data={myPosts} name={session?.user?.name !} desc={`welcome to ${session?.user?.name} profile !`} handleEdit={handleEdit} handleDelete={handleDelete} />
     </div>
   )
 }

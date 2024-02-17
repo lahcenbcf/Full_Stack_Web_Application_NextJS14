@@ -10,6 +10,6 @@ export interface Ipost {
 export interface Iuser {
   username:string
   email:string
-  id:string
+  _id:string
   image:string
 }

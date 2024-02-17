@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "set NODE_ENV=production && node server.js"
+    "start": "next start"
   },
   "dependencies": {
     "@types/express": "^4.17.21",

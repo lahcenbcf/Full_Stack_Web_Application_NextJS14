@@ -27,12 +27,15 @@ export const PATCH=async(request:Request,{params}:{
 })=>{
     try {
         await connectToDB()
-        const {tag,title}=await request.json()
+        const {tag,prompt}=await request.json()
         const existingPrompt=await Prompt.findById(params.id)
         if(existingPrompt){
-            existingPrompt.title=tag;
-            existingPrompt.tag=title;
+            existingPrompt.title=prompt;
+            existingPrompt.tag=tag;
             await existingPrompt.save()
+            return new Response("success",{
+                status:200
+            })
         }else{
             return new Response("ressource not found",{
                 status:404
