@@ -1,13 +1,12 @@
 "use client";
-
+import Link from "next/link";
 import { useState } from "react";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import {Ipost} from "@/types/index"
-const PromptCard = ({ post , handleEdit, handleDelete, handleTagClick }:{
+const PromptCard = ({ post , handleDelete, handleTagClick }:{
     post : Ipost,
-    handleEdit?:()=>void,
     handleDelete?:()=>void,
     handleTagClick?:(v:string)=>void | null
 }) => {
@@ -76,12 +75,12 @@ const PromptCard = ({ post , handleEdit, handleDelete, handleTagClick }:{
 
       {session?.user.id === post.author._id && (
         <div className='mt-5 flex justify-end gap-4 border-t border-gray-100 pt-3'>
-          <p
+          <Link
+          href={`/update-prompt/${post._id}`}
             className='font-inter font-bold text-sm green_gradient cursor-pointer'
-            onClick={handleEdit}
           >
             Edit
-          </p>
+          </Link>
           <p
             className='font-inter text-sm font-bold text-red-500 cursor-pointer'
             onClick={handleDelete}

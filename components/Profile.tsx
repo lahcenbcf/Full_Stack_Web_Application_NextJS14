@@ -2,12 +2,11 @@ import { Ipost } from "@/types";
 import PromptCard from "./PromptCard";
 import Link from "next/link";
 
-const Profile = ({ name, desc, data, handleEdit, handleDelete }:{
+const Profile = ({ name, desc, data, handleDelete }:{
     name:string,
     desc:string,
     data:Ipost[],
-    handleEdit:(id:string)=>void,
-    handleDelete:(id:string)=>void
+    handleDelete?:(id:string)=>void
 }) => {
   return (
     <section className='w-full my-16'>
@@ -21,7 +20,6 @@ const Profile = ({ name, desc, data, handleEdit, handleDelete }:{
           <PromptCard
             key={post._id}
             post={post}
-            handleEdit={() => handleEdit && handleEdit(post._id)}
             handleDelete={() => handleDelete && handleDelete(post._id)}
           />
         )) : <Link href={"/create-prompt"}>create a prompt now</Link> }

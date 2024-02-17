@@ -5,10 +5,12 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 import Form from "@/components/Form";
 
-const UpdatePrompt = () => {
+const UpdatePrompt = ({params}:{
+  params:{
+    id:string
+  }
+}) => {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const promptId = searchParams.get("id");
 
   const [post, setPost] = useState({
     title:"",
@@ -18,7 +20,7 @@ const UpdatePrompt = () => {
 
   useEffect(() => {
     const getPromptDetails = async () => {
-      const response = await fetch(`/api/prompt/${promptId}`);
+      const response = await fetch(`/api/prompt/${params.id}`);
       const data = await response.json();
       setPost({
         title: data.prompt.title,
@@ -26,17 +28,17 @@ const UpdatePrompt = () => {
       });
     };
 
-    if (promptId) getPromptDetails();
-  }, [promptId]);
+    if (params.id) getPromptDetails();
+  }, [params.id]);
 
   const updatePrompt = async (e:React.SyntheticEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    if (!promptId) return alert("Missing PromptId!");
+    if (!params.id) return alert("Missing PromptId!");
 
     try {
-      const response = await fetch(`/api/prompt/${promptId}`, {
+      const response = await fetch(`/api/prompt/${params.id}`, {
         method: "PATCH",
         body: JSON.stringify({
           prompt: post?.title,

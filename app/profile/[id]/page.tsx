@@ -43,7 +43,7 @@ const page = ({params}:{
     if(loading) return <div>loading .........</div>
   return (
     <div>
-      <Profile data={userPrompts} name={userInfo?.username} handleEdit={null!} handleDelete={null!} desc={"hello"}  />
+      <Profile data={userPrompts} name={userInfo?.username} desc={"hello"}  />
     </div>
   )
 }
